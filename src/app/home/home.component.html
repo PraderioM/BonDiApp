@@ -1,0 +1,17 @@
+<!--region fun fact display-->
+<StackLayout *ngIf="!isGoodMorning()">
+<!--<StackLayout>-->
+    <button (tap)="getFunFact()" text="{{buttonMsg}}"></button>
+    <TextView *ngIf="error" text="{{errorMsg}}"></TextView>
+</StackLayout>
+<!--endregion-->
+
+<!--region fun fact display-->
+<StackLayout *ngIf="isGoodMorning()">
+    <TextView text="{{funFact.caption}}"></TextView>
+    <!--    <Image [src]="funFact.image"></Image>-->
+    <Image [src]="funFact.image"></Image>
+    <TextView *ngIf="funFact.hasReference()" (tap)="goToReference()" text="{{funFact.reference}}"></TextView>
+</StackLayout>
+
+<!--endregion-->
