@@ -1,17 +1,22 @@
 <!--region fun fact display-->
-<StackLayout *ngIf="!isGoodMorning()">
+<StackLayout width="90%" *ngIf="!isGoodMorning()">
 <!--<StackLayout>-->
     <button (tap)="getFunFact()" text="{{buttonMsg}}"></button>
-    <TextView *ngIf="error" text="{{errorMsg}}"></TextView>
+    <Label *ngIf="error" text="{{errorMsg}}" textWrap="true"></Label>
 </StackLayout>
 <!--endregion-->
 
 <!--region fun fact display-->
-<StackLayout *ngIf="isGoodMorning()">
-    <TextView text="{{funFact.caption}}"></TextView>
-    <!--    <Image [src]="funFact.image"></Image>-->
-    <Image [src]="funFact.image"></Image>
-    <TextView *ngIf="funFact.hasReference()" (tap)="goToReference()" text="{{funFact.reference}}"></TextView>
-</StackLayout>
+<ScrollView width="90%" orientation="vertical">
+    <StackLayout *ngIf="isGoodMorning()">
+        <Label *ngIf="funFact.hasCaption()" text="{{funFact.caption}}" textWrap="true"></Label>
+        <Image [src]="funFact.image" width="100%" height="50%" stretch="aspectFill"></Image>
+        <button
+                *ngFor="let reference of funFact.references"
+                (tap)="goToReference(reference.link)"
+                text="{{reference.getMessage()}}">
+        </button>
+    </StackLayout>
+</ScrollView>
 
 <!--endregion-->

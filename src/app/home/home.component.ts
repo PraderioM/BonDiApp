@@ -2,12 +2,24 @@ import { Component, OnInit } from "@angular/core";
 import { openUrl } from "tns-core-modules/utils/utils"
 import { getNumber, getString, setNumber, setString } from "tns-core-modules/application-settings";
 
+class Reference {
+    constructor(public link: string, private message?: string) { }
+
+    getMessage() {
+        if (this.message == null) {
+            return this.link;
+        } else {
+            return this.message;
+        }
+    }
+}
+
 
 class FunFact {
-    constructor(public caption: string, public  image: string, public reference?: string) { }
+    constructor(public caption: string, public  image: string, public references: Reference[]) { }
 
-    public hasReference() {
-        return this.reference != null
+    hasCaption() {
+        return this.caption.length != 0;
     }
 }
 
@@ -26,10 +38,37 @@ export class HomeComponent implements OnInit {
     seenFunFactsName = 'seenFunFacts';
 
     allFunFacts: FunFact[] = [
-        new FunFact(
-            'Que tinguis un bon dia.',
-            '~/images/imatge.png',
-            )
+        new FunFact('Bon dia.' , '~/images/bon_dia_000.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_001.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_002.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_003.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_004.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_005.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_006.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_007.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_008.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_009.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_010.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_011.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_012.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_013.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_014.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_015.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_016.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_017.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_018.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_019.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_020.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_021.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_022.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_023.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_024.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_025.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_026.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_027.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_028.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_029.png', []),
+        new FunFact('Bon dia.' , '~/images/bon_dia_030.png', []),
     ];
 
     constructor() {
@@ -64,8 +103,8 @@ export class HomeComponent implements OnInit {
 
     }
 
-    goToReference() {
-        openUrl(this.funFact.reference);
+    goToReference(reference: string) {
+        openUrl(reference);
     }
 
     getNewFunFactIndex(seenFunFacts: number[]) {
