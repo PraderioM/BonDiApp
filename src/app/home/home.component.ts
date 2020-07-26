@@ -16,10 +16,21 @@ class Reference {
 
 
 class FunFact {
-    constructor(public caption: string, public  image: string, public references: Reference[]) { }
+    constructor(public caption: string, public  image?: string, public references?: Reference[]) { }
 
     hasCaption() {
         return this.caption.length != 0;
+    }
+
+    hasImage() {
+        return this.image != null;
+    }
+
+    getReferences() {
+        if (this.references == null) {
+            return [];
+        }
+        return this.references;
     }
 }
 
@@ -44,37 +55,51 @@ export class HomeComponent implements OnInit {
     unselectedColor = '#f3f3f3';
 
     allFunFacts: FunFact[] = [
-        new FunFact('Bon dia.' , '~/images/bon_dia_000.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_001.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_002.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_003.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_004.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_005.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_006.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_007.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_008.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_009.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_010.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_011.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_012.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_013.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_014.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_015.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_016.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_017.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_018.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_019.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_020.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_021.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_022.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_023.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_024.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_025.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_026.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_027.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_028.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_029.png', []),
-        new FunFact('Bon dia.' , '~/images/bon_dia_030.png', []),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1jxp7s74k2GUhcpHmVH--PJJ-MiP8txnk'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1cjWrfXkk2bEa1LM606-SG7pWmOsxtZnn'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1bsaezoyiS7NDEytpOVf2MZ245TH2ssi8'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1FQEHJKpyoEi7To8OG03i8fJcrHZ-x4cS'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1MrowgIVGc_-su9bmOlW0tdAJ5gpndmx2'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1h86_3tNSQaPzjeefqY0TTLOHdnNUj7Ol'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=12fc0y4ek5D6VZehySOVgBq99cE6UNSZ0'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=14ZSknUS8OXi3jZElaQoNI_NMf2fc3pYE'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1WoPXkoEL8A0scdM_rL1hPEUTzOhGWofb'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1VgsCobKSdq3n8ddxBQgyWUyRvIDMpGjn'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1SDgaAXoL3TDlypWgTJe0iQy5203vUDwb'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1UieKxf78MJKWsQmJlyJqQRu2_o_9P_bi'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1lhtgVevZaRsQuYRrFWU8-yvkezqaAt09'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1dCLFPyPfH3rqX7QVhXNsIvJEPNYAa2kc'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1uaI8-2mvkm6UeG2u6AIPjG5-PZO7IdJ1'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1VGVsTZMIdF2sW20vXkma1rOYrQTlPthm'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1Cgg2RCV99boyCZ0ALbqPH45yOCxi0ciZ'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1E0JUReHY7qrHIFYdxGkAYJ8YckWIhGrZ'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1xz8wsrAIHOj_koyRki2lpGkyD3N7EDRt'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1a1lNO2moyT4MeZ4UedM0JJLqzfL8MPqA'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=10lP2iT9xlWxFuIUlSp-dYQfwN6d-D9AU'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1II4Im4gA--0PWbKZjR4HjWUXN3TN4jSs'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1VEW2uEERtah3nUj1mP64PX-d6s2y7X6T'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1NwXAqWg8RDS67q3QtXfX0BZ7Pp4jGpI8'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=153wDHqtGlKQwuxGJoCVyTS2DlSn6rKob'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1cT_aqFy3j3oZcWjm3QY5wA5ksn2mtxiq'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1fe6g4fzBX2iRCAoTjIy9MSMyBcpRPZlc'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1Hs8NwuyHQunsNxJc0G6ahMTPwhl7lB0p'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1mxrHbbtedvU0wGuaAjQV5gxi4D4sYB_e'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1hS5NX5_6xWPnVwSM8rBm_F_dKBArsckW'),
+        new FunFact('Bon dia.','https://drive.google.com/thumbnail?id=1kbwAGxHigaULFEkKsxBAdQ1r-_s7KAIn'),
+        new FunFact('El cervell és un organ que consumeix molta energia. Donat que el koala s\'alimenta exclusivament de una fulla que, a part de ser verinosa, és molt poc nutritiva, compensa aquest fet amb l\'aventatge evolutiu de ser estúpid.',
+            'https://i.ytimg.com/vi/-tOHtuPFUYU/maxresdefault.jpg',
+            [
+                new Reference('https://www.youtube.com/watch?v=gNqQL-1gZF8', 'True Facts About Marsupials'),
+                new Reference('https://www.youtube.com/watch?v=9DVGqXaaCMY&feature=youtu.be', 'Koalas: When Stupidity is a Survival Strategy')]
+        ),
+        new FunFact('Hi ha una estació de tren en japó que te com a director un gat.',
+            'https://upload.wikimedia.org/wikipedia/commons/f/f0/Station-Master_Tama.JPG',
+            [
+                new Reference('https://www.youtube.com/watch?v=AGrlf8ww0cA', 'Cats take over Japanese island'),
+                new Reference('http://www.bbc.com/travel/story/20190522-the-cat-who-saved-a-japanese-rail-line', 'The cat who saved a japanese rail line'),
+                ]
+        ),
+
     ];
 
     constructor() {
@@ -196,8 +221,8 @@ export class HomeComponent implements OnInit {
 
             // Get full string.
             let funFactsJointString: string = funFacts[0].toString();
-            for (let funFact of funFacts) {
-                funFactsJointString = funFactsJointString + separator + funFact.toString()
+            for (let i = 1; i < funFacts.length; i++) {
+                funFactsJointString = funFactsJointString + separator + funFacts[i].toString()
             }
 
             setString(name, funFactsJointString);

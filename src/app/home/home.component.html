@@ -24,9 +24,9 @@
     <ScrollView width="90%" orientation="vertical">
         <StackLayout *ngIf="isGoodMorning()">
             <Label *ngIf="getCurrentFunFact().hasCaption()" text="{{getCurrentFunFact().caption}}" textWrap="true"></Label>
-            <Image [src]="getCurrentFunFact().image" width="100%" height="50%" stretch="aspectFill"></Image>
+            <Image *ngIf="getCurrentFunFact().hasImage()" [src]="getCurrentFunFact().image" width="100%" height="50%" stretch="aspectFill"></Image>
             <button
-                    *ngFor="let reference of getCurrentFunFact().references"
+                    *ngFor="let reference of getCurrentFunFact().getReferences()"
                     (tap)="goToReference(reference.link)"
                     text="{{reference.getMessage()}}">
             </button>
@@ -47,7 +47,6 @@
     <!--endregion-->
 
     <!--region fun fact display-->
-
     <ListView [items]="getFavoriteFunFacts()" height="99%" width="90%">
         <ng-template let-item="item">
             <StackLayout>
@@ -55,9 +54,9 @@
                        text="{{allFunFacts[item].caption}}"
                        textWrap="true">
                 </Label>
-                <Image [src]="allFunFacts[item].image" width="100%" height="50%" stretch="aspectFill"></Image>
+                <Image *ngIf="allFunFacts[item].hasImage()" [src]="allFunFacts[item].image" width="100%" height="50%" stretch="aspectFill"></Image>
                 <button
-                        *ngFor="let reference of allFunFacts[item].references"
+                        *ngFor="let reference of allFunFacts[item].getReferences()"
                         (tap)="goToReference(reference.link)"
                         text="{{reference.getMessage()}}">
                 </button>
