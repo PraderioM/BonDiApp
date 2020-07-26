@@ -1,22 +1,72 @@
-<!--region fun fact display-->
-<StackLayout width="90%" *ngIf="!isGoodMorning()">
-<!--<StackLayout>-->
-    <button (tap)="getFunFact()" text="{{buttonMsg}}"></button>
-    <Label *ngIf="error" text="{{errorMsg}}" textWrap="true"></Label>
+<ActionBar class="action-bar">
+    <StackLayout orientation="horizontal"
+                 ios:horizontalAlignment="center" android:horizontalAlignment="center"
+                 [backgroundColor]="unselectedColor">
+        <Button [backgroundColor]="!favoritesSelected ? selectedColor : unselectedColor"
+                borderWidth="0"
+                (tap)="setFavoritesSelected(false)" text="Nou" class="header-button"></Button>
+        <Button [backgroundColor]="favoritesSelected ? selectedColor : unselectedColor"
+                borderWidth="0"
+                (tap)="setFavoritesSelected(true)" text="Favorits" class="header-button"></Button>
+    </StackLayout>
+</ActionBar>
+
+<!--region bon dia page.-->
+<StackLayout *ngIf="!favoritesSelected">
+    <!--region fun fact display-->
+    <StackLayout width="90%" *ngIf="!isGoodMorning()">
+        <button *ngIf="secondsToNextFunFact() <= 0" (tap)="getFunFact()" text="{{buttonMsg}}"></button>
+        <Label *ngIf="secondsToNextFunFact() > 0" text="{{getNotTwiceErrorMessage()}}" textWrap="true"></Label>
+    </StackLayout>
+    <!--endregion-->
+
+    <!--region fun fact display-->
+    <ScrollView width="90%" orientation="vertical">
+        <StackLayout *ngIf="isGoodMorning()">
+            <Label *ngIf="getCurrentFunFact().hasCaption()" text="{{getCurrentFunFact().caption}}" textWrap="true"></Label>
+            <Image [src]="getCurrentFunFact().image" width="100%" height="50%" stretch="aspectFill"></Image>
+            <button
+                    *ngFor="let reference of getCurrentFunFact().references"
+                    (tap)="goToReference(reference.link)"
+                    text="{{reference.getMessage()}}">
+            </button>
+
+            <button (tap)="addToFavorites()" class="favorites-button" text="afegeix a favorits"> </button>
+        </StackLayout>
+    </ScrollView>
+    <!--endregion-->
 </StackLayout>
 <!--endregion-->
 
-<!--region fun fact display-->
-<ScrollView width="90%" orientation="vertical">
-    <StackLayout *ngIf="isGoodMorning()">
-        <Label *ngIf="funFact.hasCaption()" text="{{funFact.caption}}" textWrap="true"></Label>
-        <Image [src]="funFact.image" width="100%" height="50%" stretch="aspectFill"></Image>
-        <button
-                *ngFor="let reference of funFact.references"
-                (tap)="goToReference(reference.link)"
-                text="{{reference.getMessage()}}">
-        </button>
+<!--region favorites page.-->
+<StackLayout *ngIf="favoritesSelected">
+    <!--region fun fact display-->
+    <StackLayout width="90%" *ngIf="!hasFavorites()">
+        <Label text="{{getNoFavoritesErrorMessage()}}" textWrap="true"></Label>
     </StackLayout>
-</ScrollView>
+    <!--endregion-->
 
+    <!--region fun fact display-->
+
+    <ListView [items]="getFavoriteFunFacts()" height="99%" width="90%">
+        <ng-template let-item="item">
+            <StackLayout>
+                <Label *ngIf="allFunFacts[item].hasCaption()"
+                       text="{{allFunFacts[item].caption}}"
+                       textWrap="true">
+                </Label>
+                <Image [src]="allFunFacts[item].image" width="100%" height="50%" stretch="aspectFill"></Image>
+                <button
+                        *ngFor="let reference of allFunFacts[item].references"
+                        (tap)="goToReference(reference.link)"
+                        text="{{reference.getMessage()}}">
+                </button>
+
+                <button (tap)="removeFromFavorites(item)" class="remove-button" text="treu de favorits">
+
+                </button>
+            </StackLayout>
+        </ng-template>
+    </ListView>
+</StackLayout>
 <!--endregion-->

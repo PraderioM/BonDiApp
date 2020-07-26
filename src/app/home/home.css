@@ -1,0 +1,26 @@
+.remove-button{
+    color: red;
+    text-align: center;
+    padding-top: 20px;
+
+    margin: 0px 50px;
+
+    width: 50%;
+    height: 100px;
+}
+
+.favorites-button{
+     color: blue;
+     text-align: center;
+     padding-top: 20px;
+
+     margin: 0px 50px;
+
+     width: 50%;
+     height: 100px;
+ }
+
+
+.header-button{
+    width: 50%;
+}

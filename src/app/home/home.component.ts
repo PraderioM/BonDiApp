@@ -25,17 +25,23 @@ class FunFact {
 
 @Component({
     selector: "Home",
-    templateUrl: "./home.component.html"
+    templateUrl: "./home.component.html",
+    styleUrls: ["./home.css"]
 })
 export class HomeComponent implements OnInit {
-    error = false;
     buttonMsg = "Pitja'm per dades ràndom.";
     minFunFactTimeSpacing = 22 * 60 * 60 * 1000;
-    errorMsg = "Ja has rebut el teu 'fun fact'/'bon dia' diari ara toca afrontar el dia amb un somriure.";
-    funFact?: FunFact;
+    funFactIndex?: number;
     lastFunFactTimeName = 'lastFunFactTime';
     seenFunFactsSeparator = ',';
     seenFunFactsName = 'seenFunFacts';
+    favoriteFunFactsSeparator = ',';
+    favoriteFunFactsName = 'favoriteFunFacts';
+
+    favoritesSelected = false;
+
+    selectedColor = '#aaaaaa';
+    unselectedColor = '#f3f3f3';
 
     allFunFacts: FunFact[] = [
         new FunFact('Bon dia.' , '~/images/bon_dia_000.png', []),
@@ -80,28 +86,48 @@ export class HomeComponent implements OnInit {
     }
 
     isGoodMorning() {
-        return this.funFact != null
+        return this.funFactIndex != null
     }
 
     getFunFact() {
+        if (this.secondsToNextFunFact() > 0) {
+            return;
+        }
+        let seenFunFacts = this.getSeenFunFacts();
+        let newFunFactIndex = this.getNewFunFactIndex(seenFunFacts);
+        this.funFactIndex = newFunFactIndex;
+
+        seenFunFacts.push(newFunFactIndex);
+        this.setSeenFunFacts(seenFunFacts);
+        setNumber(this.lastFunFactTimeName, new Date().getTime());
+    }
+
+    secondsToNextFunFact() {
         let lastFunFactTime = getNumber(this.lastFunFactTimeName, 0);
         let now = new Date().getTime();
-
-        if (now - lastFunFactTime < this.minFunFactTimeSpacing) {
-            this.error = true;
-        }
-        else {
-
-            let seenFunFacts = this.getSeenFunFacts();
-            let newFunFactIndex = this.getNewFunFactIndex(seenFunFacts);
-            this.funFact = this.allFunFacts[newFunFactIndex];
-
-            seenFunFacts.push(newFunFactIndex);
-            this.setSeenFunFacts(seenFunFacts);
-            setNumber(this.lastFunFactTimeName, now);
-        }
-
+        return Math.floor(Math.max(0, lastFunFactTime + this.minFunFactTimeSpacing - now)/1000);
     }
+
+    getTimeStringFromSeconds(totalSeconds: number) {
+        let seconds = totalSeconds % 60;
+        let minutes = ((totalSeconds - seconds) / 60) % 60;
+        let hours = ((totalSeconds - seconds) / 60 - minutes) / 60;
+        return hours.toString() + ':' + minutes.toString() + ':' + seconds.toString();
+    }
+
+    getNotTwiceErrorMessage() {
+        let timeString = this.getTimeStringFromSeconds(this.secondsToNextFunFact());
+        let errorMsg = "Ja has rebut el teu 'fun fact'/'bon dia' diari ara toca afrontar el dia amb un somriure.";
+        errorMsg += "\nCompte enrere per el pròxim 'fun fact'/'bon dia' " + timeString + ".";
+        return errorMsg;
+    }
+
+    getNoFavoritesErrorMessage() {
+        let errorMsg = "Encara no tens cap 'fun fact'/'bon dia' favorit.";
+        errorMsg += "\nSi et disposes a que t'agradin més les coses somriuràs més.";
+        return errorMsg;
+    }
+
 
     goToReference(reference: string) {
         openUrl(reference);
@@ -128,32 +154,96 @@ export class HomeComponent implements OnInit {
     }
 
     getSeenFunFacts() {
-        let seenFunFacts: number[] = [];
-        let seenFunFactsJointString = getString(this.seenFunFactsName, '');
-        if (seenFunFactsJointString.length != 0) {
-            let seenFunFactsStrings = seenFunFactsJointString.split(this.seenFunFactsSeparator);
-            for (let i = 0; i < seenFunFactsStrings.length; i++) {
-                seenFunFacts.push(parseInt(seenFunFactsStrings[i]));
-            }
-        }
-
-        return seenFunFacts;
+        return this.getFunFactIndexes(this.seenFunFactsName, this.seenFunFactsSeparator);
     }
 
     setSeenFunFacts(seenFunFacts: number[]) {
+        this.setFunFactIndexes(seenFunFacts, this.seenFunFactsName, this.seenFunFactsSeparator, true);
+    }
+
+    getFavoriteFunFacts() {
+        return this.getFunFactIndexes(this.favoriteFunFactsName, this.favoriteFunFactsSeparator);
+    }
+
+    setFavoriteFunFacts(favoriteFunFacts: number[]) {
+        this.setFunFactIndexes(
+            favoriteFunFacts,
+            this.favoriteFunFactsName,
+            this.favoriteFunFactsSeparator,
+            false
+        );
+    }
+
+    getFunFactIndexes(name: string, separator: string) {
+        let funFacts: number[] = [];
+        let funFactsJointString = getString(name, '');
+        if (funFactsJointString.length != 0) {
+            let funFactsStrings = funFactsJointString.split(separator);
+            for (let i = 0; i < funFactsStrings.length; i++) {
+                funFacts.push(parseInt(funFactsStrings[i]));
+            }
+        }
+
+        return funFacts;
+    }
+
+    setFunFactIndexes(funFacts: number[], name: string, separator: string, resetIfFull: boolean = true) {
         // Consider trivial cases.
-        if (seenFunFacts.length == this.allFunFacts.length || seenFunFacts.length == 0) {
-            setString(this.seenFunFactsName, '');
+        if ((funFacts.length == this.allFunFacts.length && resetIfFull) || funFacts.length == 0) {
+            setString(name, '');
         }
         else {
 
             // Get full string.
-            let seenFunFactsJointString: string = seenFunFacts[0].toString();
-            for (let i = 1; i < seenFunFacts.length; i++) {
-                seenFunFactsJointString = seenFunFactsJointString + this.seenFunFactsSeparator + seenFunFacts[i].toString()
+            let funFactsJointString: string = funFacts[0].toString();
+            for (let funFact of funFacts) {
+                funFactsJointString = funFactsJointString + separator + funFact.toString()
             }
 
-            setString(this.seenFunFactsName, seenFunFactsJointString);
+            setString(name, funFactsJointString);
         }
+    }
+
+    addToFavorites() {
+        if (this.funFactIndex == null) {
+            return;
+        }
+        let favoriteFunFacts = this.getFavoriteFunFacts();
+        let alreadyFavorite = false;
+        for (let favoriteIndex of favoriteFunFacts) {
+            if (this.funFactIndex === favoriteIndex) {
+                alreadyFavorite = true;
+                break
+            }
+        }
+
+        if (!alreadyFavorite) {
+            favoriteFunFacts.push(this.funFactIndex);
+            this.setFavoriteFunFacts(favoriteFunFacts);
+        }
+    }
+
+    removeFromFavorites(index: number) {
+        let favoriteFunFacts = this.getFavoriteFunFacts();
+        let newFavoriteFunFacts: number[] = [];
+        for (let i= 0; i < favoriteFunFacts.length; i++) {
+            let favoriteIndex = favoriteFunFacts[i];
+            if (favoriteIndex !== index) {
+                newFavoriteFunFacts.push(favoriteIndex);
+            }
+        }
+        this.setFavoriteFunFacts(newFavoriteFunFacts);
+    }
+
+    getCurrentFunFact() {
+        return this.allFunFacts[this.funFactIndex];
+    }
+
+    hasFavorites() {
+        return this.getFavoriteFunFacts().length != 0;
+    }
+
+    setFavoritesSelected(newStatus: boolean) {
+        this.favoritesSelected = newStatus;
     }
 }
